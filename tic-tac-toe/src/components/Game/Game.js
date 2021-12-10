@@ -8,11 +8,12 @@ class Game extends Component {
         this.state = {
             history: [
                 {
-                    squares: Array(9).fill(null)
+                    squares: Array(9).fill(null),
+                    currentIndex: null
                 }
             ],
             stepNumber: 0,
-            xIsNext: true
+            xIsNext: true,
         }
     }
 
@@ -27,11 +28,12 @@ class Game extends Component {
         this.setState({
             history: history.concat([
                 {
-                    squares: squares
+                    squares: squares,
+                    currentIndex: i
                 }
             ]),
             stepNumber: history.length,
-            xIsNext: !this.state.xIsNext
+            xIsNext: !this.state.xIsNext,
         })
     }
 
@@ -39,6 +41,12 @@ class Game extends Component {
         this.setState({
             stepNumber: step,
             xIsNext: (step % 2 === 0)
+        })
+    }
+
+    reverseStep() {
+        this.setState({
+            history: this.state.history.reverse()
         })
     }
 
@@ -51,7 +59,7 @@ class Game extends Component {
         console.log(winner);
 
         const moves = history.map((step, move) => {
-            const desc = move ? 'Go to move #' + move : 'Go to game start';
+            const desc = move ? `Go to move #${move} in cell[${Math.floor(step.currentIndex / 3)}, ${step.currentIndex % 3}]` : 'Go to game start';
             return <li key={move}><button onClick={() => this.jumpTo(move)}>{desc}</button></li>
         })
 
@@ -59,7 +67,12 @@ class Game extends Component {
         if(winner) {
             status = `Winner is ${winner}`;
         }else {
-            status = `Next player is: ${this.state.xIsNext ? 'X' : 'O'}`;
+            if(history.length === 10) {
+                status = 'Draw';
+            }
+            else {
+                status = `Next player is: ${this.state.xIsNext ? 'X' : 'O'}`;
+            }
         }
 
         return(
@@ -71,6 +84,7 @@ class Game extends Component {
                     <div>{status}</div>
                     <ol>{moves}</ol>
                 </div>
+                <button onClick={() => this.reverseStep()}>Reverse Step</button>
             </div>
         )
     }

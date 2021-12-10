@@ -1,12 +1,6 @@
 import React, {Component} from 'react';
 import Square from '../Square/Square';
 
-const boardIndex = [
-    [0, 1, 2],
-    [3, 4, 5],
-    [6, 7, 8]
-]
-
 class Board extends Component {
     renderSquare(i) {
         return(
@@ -14,24 +8,26 @@ class Board extends Component {
         )
     }
 
+    createBoard(row, col) {
+        let board = [];
+        let count = 0;
+    
+        for (let i = 0; i < row; i++) {
+          let columns = [];
+          for (let j = 0; j < col; j++) {
+            columns.push(this.renderSquare(count++));
+          }
+          board.push(<div className="board-row">{columns}</div>);
+        }
+    
+        return board;
+    }
+
     render() {
+        const board = this.createBoard(3, 3);
         return(
             <div className="board">
-                <div className="board-row">
-                    {this.renderSquare(0)}
-                    {this.renderSquare(1)}
-                    {this.renderSquare(2)}
-                </div>
-                <div className="board-row">
-                    {this.renderSquare(3)}
-                    {this.renderSquare(4)}
-                    {this.renderSquare(5)}
-                </div>
-                <div className="board-row">
-                    {this.renderSquare(6)}
-                    {this.renderSquare(7)}
-                    {this.renderSquare(8)}
-                </div>
+                {board}
             </div>
         )
     }
