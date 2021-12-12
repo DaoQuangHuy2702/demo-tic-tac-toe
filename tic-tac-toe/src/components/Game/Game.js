@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import './Game.css';
 import Board from '../Board/Board';
 
 class Game extends Component {
@@ -52,22 +53,22 @@ class Game extends Component {
 
     render() {
         const history = this.state.history;
-        console.log(history);
         const current = history[this.state.stepNumber];
-        console.log(current);
         const winner = calculateWinner(current.squares);
-        console.log(winner);
 
         const moves = history.map((step, move) => {
-            const desc = move ? `Go to move #${move} in cell[${Math.floor(step.currentIndex / 3)}, ${step.currentIndex % 3}]` : 'Go to game start';
+            const desc = step.currentIndex != null ? `Go to move #${move} in cell[${Math.floor(step.currentIndex / 3)}, ${step.currentIndex % 3}]` : 'Go to game start';
+            if(move === history.length - 1) {
+                return <li key={move}><button style={{backgroundColor: "lightblue"}} onClick={() => this.jumpTo(move)}>{desc}</button></li>
+            }
             return <li key={move}><button onClick={() => this.jumpTo(move)}>{desc}</button></li>
         })
 
         let status;
         if(winner) {
-            status = `Winner is ${winner}`;
+            status = `Winner is ${winner.winSquares}`;
         }else {
-            if(history.length === 10) {
+            if(current.squares.indexOf(null) === -1) {
                 status = 'Draw';
             }
             else {
@@ -78,13 +79,13 @@ class Game extends Component {
         return(
             <div className="game">
                 <div className="game-board">
-                    <Board squares={current.squares} onClick={(i) => this.handleClick(i)}/>
+                    <Board squares={current.squares} winRow={winner ? winner.winRow : null} onClick={(i) => this.handleClick(i)}/>
                 </div>
                 <div className="game-info">
                     <div>{status}</div>
                     <ol>{moves}</ol>
+                    <button onClick={() => this.reverseStep()}>Reverse Step</button>
                 </div>
-                <button onClick={() => this.reverseStep()}>Reverse Step</button>
             </div>
         )
     }
@@ -105,7 +106,11 @@ function calculateWinner(squares) {
     for(let i = 0; i < lines.length; i++) {
         const [a, b, c] = lines[i];
         if(squares[a] && squares[a] === squares[b] && squares[b] === squares[c]) {
-            return squares[a];
+            const winner = {
+                winSquares: squares[a],
+                winRow: lines[i]
+            }
+            return winner;
         }
     }
     

@@ -1,0 +1,22 @@
+.square {
+    background-color: white;
+    border: 1px solid black;
+    float: left;
+    margin-right: -1px;
+    margin-top: -1px;
+    padding: 0;
+    width: 80px;
+    height: 80px;
+    text-align: center;
+    font-size: 40px;
+    font-weight: bold;
+    line-height: 80px;
+}
+
+.square:focus {
+    outline: none;
+}
+
+.square.square--win {
+    background-color: #888888;
+}

@@ -4,9 +4,9 @@ import './Square.css';
 class Square extends Component {
     render() {
         return(
-            <div className="square">
-                <button onClick={this.props.onClick}>{this.props.value}</button>
-            </div>
+            <button className={this.props.isWin ? "square square--win" : "square"} onClick={this.props.onClick}>
+                {this.props.value}
+            </button>
         )
     }
 }

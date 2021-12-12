@@ -1,10 +1,13 @@
 import React, {Component} from 'react';
+import './Board.css';
 import Square from '../Square/Square';
 
 class Board extends Component {
     renderSquare(i) {
         return(
-            <Square value={this.props.squares[i]} onClick={() => this.props.onClick(i)}/>
+            <Square value={this.props.squares[i]}
+             isWin={(this.props.winRow != null && this.props.winRow.indexOf(i) !== -1) ? true : false} 
+             onClick={() => this.props.onClick(i)}/>
         )
     }
 
